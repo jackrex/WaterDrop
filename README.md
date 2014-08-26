@@ -10,6 +10,11 @@ The Small Clock I Write in 2014. 4 . Now I share you with this beatiful app.
 </p>
 
 
+### Download
+
+  <img src="./erwei.png" alt="WaterDrop" title="WaterDrop">
+</p>
+
 ### Introduce
 
 Time Drop is a very simple and elegant timer. 
