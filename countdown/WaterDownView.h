@@ -11,11 +11,8 @@
 #import <QuartzCore/QuartzCore.h>
 @interface WaterDownView : UIView
 {
-
     Water *waterDrop;
     CADisplayLink *links;
-
-    
 }
 
 

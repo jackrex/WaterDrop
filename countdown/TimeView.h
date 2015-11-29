@@ -15,6 +15,5 @@
     
     NSInteger *min;
     NSInteger *sec;
-    
 }
 @end

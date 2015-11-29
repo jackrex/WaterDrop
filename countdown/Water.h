@@ -10,7 +10,6 @@
 #define LENGTH 400
 @interface Water : UIView
 {
-
     UIImageView *waterdrop;
     CGPoint speed;
     BOOL posVailed;

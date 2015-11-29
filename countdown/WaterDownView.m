@@ -12,14 +12,9 @@
 
 - (id)initWithFrame:(CGRect)frame
 {
-
-    
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-    
-
-        
         links = [CADisplayLink displayLinkWithTarget:self selector:@selector(loop:)];
         
         [links addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
@@ -34,31 +29,10 @@
     return self;
 }
 
-
 -(void)loop :(CADisplayLink *) sender {
-
     if (!waterDrop.isPosVailed) {
-        
         [waterDrop resetPos:CGPointMake(160, 0)];
-        
     }
-    
     [waterDrop update];
-    
 }
-
-
-
-
-
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
-
 @end

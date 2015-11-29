@@ -12,7 +12,6 @@
 #import "TimeView.h"
 @interface WaterUpView : UIView
 {
-
     UIImageView *water;
     TimeView *timeView;
     WaterWave *wave;

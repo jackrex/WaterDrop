@@ -8,15 +8,9 @@
 
 #import "ViewController.h"
 #import "UMSocial.h"
-#import "MobClick.h"
 #import "SettingTableViewController.h"
-@interface ViewController ()<GADBannerViewDelegate,UIAlertViewDelegate>{
+@interface ViewController ()<UIAlertViewDelegate>{
 
-   BOOL areAdsRemoved;
-    UIAlertView *alertDialog;
-    BOOL israte;
-
-    
 }
 @property (nonatomic, strong) NSMutableIndexSet *optionIndices;
 @end
@@ -24,114 +18,10 @@
 @implementation ViewController
 @synthesize timeLable;
 @synthesize hintLable;
-@synthesize  adBanner;
-
-
-
-
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    
-    
-    if (israte) {
-        
-        
-        
-        [[UIApplication sharedApplication]openURL:[NSURL URLWithString:@"https://itunes.apple.com/us/app/time-drop-water-drop-timedrop/id856824051?l=zh&ls=1&mt=8"]];
-        
-        [self doRemoveAds];
-        
-        return;
-    }
-    
-    
-}
-
-
-- (void)doRemoveAds{
-    
-
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"areAdsRemoved"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    
-   
-
-    
-}
-
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    
-    
-    areAdsRemoved = [[NSUserDefaults standardUserDefaults] boolForKey:@"areAdsRemoved"];
-    
-    NSLog(@"areAdsRemoved is %d",areAdsRemoved);
-    
-    
-    
-     [MobClick updateOnlineConfig];
-    NSString *para =  [MobClick getConfigParams:@"rate"];
-    
-    NSLog(@"para is %@",para);
-    
-    if (![para isEqualToString:@"yes"]) {
-        
-        alertDialog = [[UIAlertView alloc]initWithTitle:@"Get More" message:@"Get More Song & Remove Ads" delegate:self cancelButtonTitle:@"cancel" otherButtonTitles:@"purchase",@"restore",nil];
-        
-        
-    }else{
-        
-        alertDialog = [[UIAlertView alloc]initWithTitle:@"Rate 5 stars " message:@"Get More Func & Remove Ads" delegate:self cancelButtonTitle:@"cancel" otherButtonTitles:@"rate",nil];
-        
-        israte = YES;
-        
-    }
-    
-    
-
-    
-    
-    if (!UIUserInterfaceIdiomPad == [UIDevice currentDevice].userInterfaceIdiom) {
-        
-        adBanner = [[GADBannerView alloc]initWithAdSize:kGADAdSizeBanner];
-        
-        
-    }else{
-        
-        adBanner = [[GADBannerView alloc]initWithAdSize:kGADAdSizeLeaderboard];
-        
-        
-    }
-    
-    
-    
-    adBanner.adUnitID = @"ca-app-pub-5837066748747035/9254738502";
-    
-    adBanner.rootViewController = self;
-    
-    if (!areAdsRemoved) {
-        
-        [self.view addSubview:adBanner];
-    }
-    
-    
-    
-    [adBanner setDelegate:self];
-    
-    GADRequest *request = [GADRequest request];
-    
-    // request.testDevices = @[ @"8897d0a8ada13fe8996cbefc1d4727a7" ];
-    
-    
-    
-    [adBanner loadRequest:request];
-    
-    
-
-    
     
     self.view.backgroundColor = [UIColor blackColor];
     self.optionIndices = [NSMutableIndexSet indexSetWithIndex:1];
@@ -151,52 +41,33 @@
     isOverHeight = NO;
     isPause = NO;
     
-    
     touchYOffSet = 0.0f;
-    
-	
-    
-    
+ 
     timeLable.font = [UIFont fontWithName:@"MyriadSetPro-Ultralight" size:72];
     hintLable.font =[UIFont fontWithName:@"MyriadSetPro-Ultralight" size:18];
     
-    
-     songs = [[NSMutableArray alloc]init];
-    
+    songs = [[NSMutableArray alloc]init];
     for (NSInteger i = 4; i<10; i++) {
-       
         [songs addObject:[NSString stringWithFormat:@"waterdrop_%d",i]];
-        
     }
-    
     
     NSRunLoop *runloop = [NSRunLoop currentRunLoop];
     NSTimer *timer = [NSTimer timerWithTimeInterval:1.0 target:self selector:@selector(mytimerAction) userInfo:nil repeats:YES];
     
     NSTimer *timer2 = [NSTimer timerWithTimeInterval:1.5 target:self selector:@selector(turnLight) userInfo:nil repeats:YES];
-    
-    
-  //   NSTimer *timerSplash = [NSTimer timerWithTimeInterval:1.5 target:self selector:@selector(splash) userInfo:nil repeats:YES];
-    
+
     [runloop addTimer:timer forMode:NSRunLoopCommonModes];
     [runloop addTimer:timer forMode:UITrackingRunLoopMode];
     
     [runloop addTimer:timer2 forMode:NSRunLoopCommonModes];
     [runloop addTimer:timer2 forMode:UITrackingRunLoopMode];
 
-    
-//    [runloop addTimer:timerSplash forMode:NSRunLoopCommonModes];
-//    [runloop addTimer:timerSplash forMode:UITrackingRunLoopMode];
-
-    
     waterWave = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"timer_wave1.png"]];
     waterWave.frame = CGRectMake(-320, 186, 640, 14);
-    
     
     links = [CADisplayLink displayLinkWithTarget:self selector:@selector(loop:)];
     
     [links addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    
     
 
     hopeTimeLable =  [[UILabel alloc]initWithFrame:CGRectMake(100, 190, 100, 29)];
@@ -211,24 +82,17 @@
     touchImage = [[UIImageView alloc]initWithFrame:CGRectMake(160, 175, 50, 50)];
     
     bg = [[UIImageView alloc]initWithFrame:CGRectMake(0, [[UIApplication sharedApplication] statusBarFrame].size.height, 320, 640)];
-    
-    
-   // bg.backgroundColor = [UIColor colorWithRed:122.0f/255.0f green:181.0f/255.0f blue:224.0f/255.0f alpha:1.0f];
-    
+  
     bg.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"xxx.png"]];
     
     touchImage.image = [UIImage imageNamed:@"touch.png"];
     
-    
     waterDrop =  [[Water alloc]initWithPos:CGPointMake(self.view.frame.size.width/2 -10, 348)];
-    
     
     hopeTimeLable.hidden = YES;
     line.hidden = YES;
     touchImage.hidden = YES;
     waterDrop.hidden = YES;
-    
-    
     
     water = [[UIImageView alloc]initWithFrame:CGRectMake(0, 200, 320, 640)];
     
@@ -248,550 +112,244 @@
     [self.view addSubview:hopeTimeLable];
     [self.view addSubview:bg];
     [self.view sendSubviewToBack:bg];
-    
 
-    
-    NSLog(@"Time Lable pos %f, %f",timeLable.center.x, timeLable.center.y);
-    
-    //pos y = 120
-    
 }
-
-
-
-
-
-
-
-
-- (IBAction)menuButtonClick:(id)sender {
-    
-
-
-
-    
-    
-    
-}
-
-
-
-
-
-
-
-
-
-
-
 
 #pragma mark -infinate loop
-
-
 -(void)loop :(CADisplayLink *) sender {
-    
-    
-    
     [self updateWaterWave];
-    
-    
     if (isStart) {
-        
         timeLable.alpha = 1.0;
           [waterDrop update];
     }else{
-    
         waterDrop.hidden = YES;
-        
-        
         if (isShouldTurnLight) {
-            
             timeLable.alpha =  timeLable.alpha - 0.01;
             if (timeLable.alpha <= 0.4) {
-                
                 timeLable.alpha = 0.4;
             }
-            
         }else{
-            
             timeLable.alpha = timeLable.alpha + 0.01;
-            
             if (timeLable.alpha >= 1.0) {
-                
                 timeLable.alpha = 1.0;
             }
-            
         }
         
-        
-        // NSLog(@"alpha is %f", timeLable.alpha);
-        
-        if (timeLable.alpha <= 1.0 && timeLable.alpha > 0.3) {
-            
-            
-            
-            
-        }
-        
-        
-        else if (timeLable.alpha <= 0.3) {
-            
+        if (timeLable.alpha <= 0.3) {
             timeLable.alpha =  timeLable.alpha + 0.1;
-            
         }
-        
-        
-        
-        
     }
-    
-    
-  //  NSLog(@"loop isshouba %d", isShouldRaiseTimeBack);
-    
+
     if (isShouldRaiseTimeBack) {
-        
         [self raiseTimeBackPos];
-        
-        
         if (timeLable.center.y < 80) {
-            
             isShouldRaiseTimeBack = NO;
             isShouldPushTimeDown = YES;
-            
-            
         }
-        
-        
-        
     }
     
     if (isShouldPushTimeDown) {
-        
         [self pushTimeDown];
-        
-        
-        
-    }
-    
 
-    
-    
+    }
+
     //拉取时候的暂停
     if (isPause) {
-        
         waterDrop.hidden = YES;
-        
-
-        
         return;
     }else {
-    
         if (timeLable.center.y >= 120 ) {
-            
             isShouldRaiseTimeBack = YES;
-            
         }else{
-          
-         isShouldRaiseTimeBack = NO;
+            isShouldRaiseTimeBack = NO;
         }
-    
     }
     
-    
     if (!waterDrop.isPosVailed) {
-        
         if (!isStart) {
-            
             return;
         }
-        
         [waterDrop resetPos:CGPointMake(self.view.frame.size.width/2-10, 348)];
         [self initPlayerAndPlay:[songs objectAtIndex:arc4random()%5]];
         
     }
-    
-    
 
-    
-  
-    
-    
 }
 
-
-
-
-
-
 -(void)raiseTimeBackPos{
-    
     float speed = 15;
     float y = timeLable.center.y - (speed++)  ;
     timeLable.center = CGPointMake(timeLable.center.x
                                    , y) ;
-    
-    
     hintLable.center = CGPointMake(timeLable.center.x
                                    , y - 40);
-    
-    
-   
-    
+
 }
 
-
-
-
 -(void)pushTimeDown{
-    
-    
     float speed = 15;
     float y = timeLable.center.y + (speed++)  ;
     timeLable.center = CGPointMake(timeLable.center.x
                                    , y) ;
-    
-    
     hintLable.center = CGPointMake(timeLable.center.x
                                    , y - 40);
-    
     if (timeLable.center.y >= 120) {
         isShouldPushTimeDown = NO;
         isShouldRaiseTimeBack = NO;
     }
-
-    
     isPause = NO;
-    
 }
 
-
-
-
-
 #pragma mark -updateTime
-
-
 -(void)mytimerAction{
-    
-    
-    if (isPause
-        ) {
-        
-        
-        
+    if (isPause) {
         return;
     }
     
-    
     if (isStart) {
-        
         if (isSplashFinish) {
-            
             [self setTime];
-            
         }
-        
-    }else{
-    
-   
-    
     }
-    
-  
-    
 }
-
-
-
 
 -(void)turnLight{
-    
     if (!isStart) {
-        
         isShouldTurnLight = !isShouldTurnLight;
-      
-    }else{
-
-        
-        
     }
-    
-
-    
-
-
 }
-
-
 
 -(void)splash{
-
-      [self performSelector:@selector(splashfinish) withObject:nil afterDelay:1];
+    [self performSelector:@selector(splashfinish) withObject:nil afterDelay:1];
     timeLable.alpha = 0.2;
     [self performSelector:@selector(delay) withObject:nil afterDelay:0.3];
-
 }
 
-
 -(void)delay{
-
     timeLable.alpha = 1.0;
-    
     if (!isSplashFinish) {
         [self performSelector:@selector(splash) withObject:nil afterDelay:0.3];
     }
-    
 }
-
 
 -(void)splashfinish{
-
     isSplashFinish = YES;
-
 }
 
-
-
-
 -(void)setTime{
-    
-    
     if (!isStart) {
-        
         waterDrop.hidden = YES;
-
         return;
-        
     }
-    
 
-    
     NSArray *times =  [timeLable.text componentsSeparatedByString:@":"];
-    
-    NSLog(@"min is %@, sec is %@", [times objectAtIndex:0], [times objectAtIndex:1]);
-    
     min = [[times objectAtIndex:0] intValue];
-    
     sec =[[times objectAtIndex:1] intValue];
-    
-    
-    
     if (!isCountTimeMode ) {
-        
         if (min == 0 && sec == 0) {
-            
             isStart = NO;
             return;
         }
-        
     }
     
-    
     waterDrop.hidden = NO;
-    
     if (isCountTimeMode) {
-        
-        
-        
         sec++;
-        
         NSString *newTime ;
-        
         if (sec<10) {
-            
             if (min < 10) {
                 newTime = [NSString stringWithFormat:@"0%d:0%d",min,sec];
-                
-                
             }
             else{
-            newTime = [NSString stringWithFormat:@"%d:0%d",min,sec];
-            
+                newTime = [NSString stringWithFormat:@"%d:0%d",min,sec];
             }
-      
-            
-            
+
         }else{
-            
-            
-            
             if (sec == 59) {
-                
                 sec = 0;
                 min++;
-                
                 if (min < 10) {
-                    
                     newTime = [NSString stringWithFormat:@"0%d:%d",min,sec];
                     timeLable.text = newTime;
-                    
                     return;
-                    
                 }
-                
-                
                 newTime = [NSString stringWithFormat:@"%d:%d",min,sec];
                 timeLable.text = newTime;
                 return;
             }
-            
-            
             if (min>10) {
-                
                 newTime = [NSString stringWithFormat:@"%d:%d",min,sec];
-
-                
             }else{
-            
                 newTime = [NSString stringWithFormat:@"0%d:%d",min,sec];
-
             }
-            
-            
-            
         }
-        
         timeLable.text = newTime;
-
-        
         return;
     }
     
-    
     sec--;
-    
     NSString *newTime ;
-    
     if (sec<10) {
-        
-     
-        
         if (sec == 0 || sec == -1) {
-            
-            
             if (min == 0 && sec == 0) {
-                
                 timeLable.text = @"00:00";
                 [self timeUp];
-                
                 return;
             }
-            
             sec = 59;
             min--;
-            
             if (min<10) {
-                
                  newTime = [NSString stringWithFormat:@"0%d:%d",min,sec];
             }else{
-            
-            newTime = [NSString stringWithFormat:@"%d:%d",min,sec];
+                newTime = [NSString stringWithFormat:@"%d:%d",min,sec];
             }
             timeLable.text = newTime;
-            
             return;
-            
-              }
+        }
         
-            if (min < 10) {
-                
-                newTime = [NSString stringWithFormat:@"0%d:0%d",min,sec];
-                timeLable.text = newTime;
-                
-                
-                if (min == 0 && sec == 0) {
-                    
-                    timeLable.text = @"00:00";
-                    [self timeUp];
-                    
-                }
-                
-                
-                return;
-                
-          
-            
-            
-            newTime = [NSString stringWithFormat:@"%d:%d",min,sec];
+        if (min < 10) {
+            newTime = [NSString stringWithFormat:@"0%d:0%d",min,sec];
             timeLable.text = newTime;
-            return;
+            if (min == 0 && sec == 0) {
+                timeLable.text = @"00:00";
+                [self timeUp];
+            }
+
         }
           newTime = [NSString stringWithFormat:@"%d:0%d",min,sec];
           timeLable.text = newTime;
-
-        
     }else{
-    
         if (min < 10) {
-            
             newTime = [NSString stringWithFormat:@"0%d:%d",min,sec];
             timeLable.text = newTime;
-            
-            
             if (min == 0 && sec == 0) {
-                
                 timeLable.text = @"00:00";
                 [self timeUp];
-                
             }
-            
-            
             return;
-
-            
         }else{
-        
             newTime = [NSString stringWithFormat:@"%d:%d",min,sec];
             timeLable.text = newTime;
-            
-        
         }
-        
-  
-    
     }
-    
- 
-    
 }
 
-
-
-
 -(void)timeUp{
-
     NSError *error = [[NSError alloc]init];
-    
     NSString *soundFilePath;
     soundFilePath = [[NSBundle mainBundle] pathForResource:@"didi" ofType: @"mp3"];
-    
-    
     NSURL *fileURL = [[NSURL alloc] initFileURLWithPath:soundFilePath ];
-    
     
     finalPlayer = [[AVAudioPlayer alloc]initWithContentsOfURL:fileURL error:&error];
     finalPlayer.numberOfLoops = -1;
     finalPlayer.volume = 1.0;
     
-    
-    NSLog(@"error is %@",error);
-    
     [finalPlayer prepareToPlay];
-    
     [finalPlayer play];
-
 }
 
-
-
 #pragma mark - updateWater
-
-
 -(void)updateWater:(CGPoint)pos{
-    
-  
-    
-
     if (isSetTime) {
         if (pos.y
             > 200) {
@@ -804,55 +362,28 @@
         waterWave.frame = CGRectMake(0, waterWavePosY, 640, 14);
         }
     }
-  
-    
-
-
 }
-
-
-
 
 -(void)updateWaterWave{
-    
-
-    
-    
-        waterWave.frame = [self nextPosition];
-    
-        if (waterWave.frame.origin.x >= 0 && waterWave.frame.origin.y >= 186) {
-             [self resetPos:CGPointMake(-320, 186)];
-        
-        }else if(waterWave.frame.origin.x >= 0 && waterWave.frame.origin.y < 186){
-        
-            [self resetPos:CGPointMake(-320, waterWavePosY)];
-        
-        }
-   
-
-
+    waterWave.frame = [self nextPosition];
+    if (waterWave.frame.origin.x >= 0 && waterWave.frame.origin.y >= 186) {
+        [self resetPos:CGPointMake(-320, 186)];
+    }else if(waterWave.frame.origin.x >= 0 && waterWave.frame.origin.y < 186){
+        [self resetPos:CGPointMake(-320, waterWavePosY)];
+    }
 }
-
 
 -(void)resetPos:(CGPoint)pos{
     if (waterWavePosY >= 186) {
         waterWave.frame = CGRectMake(-320, 186, waterWave.frame.size.width, waterWave.frame.size.height);
         return;
-        
     }
-    
-
     waterWave.frame = CGRectMake(-320
                                  , waterWave.frame.origin.y, waterWave.frame.size.width, waterWave.frame.size.height);
     
-    
 }
 
-
 - (CGRect) nextPosition {
-    
-
-    
     if (waterWavePosY == 186) {
        
          return CGRectMake(waterWave.frame.origin.x+2, 186,waterWave.frame.size.width,waterWave.frame.size.height);
@@ -861,31 +392,15 @@
     
 }
 
-
-
 float preY;
-
-
 #pragma mark - touches
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     
     UITouch *touch = [[event allTouches] anyObject];
     CGPoint location = [touch locationInView:self.view];
-    
-    NSLog(@"location %f, %f",location.x,location.y);
-    
-
-   
-    
     [self updateWater:location];
-    
-    
-      //isTimeLable Click
-    
     if (!isTimeLineClick) {
-        
-
         if (location.x >= timeLable.center.x - timeLable.frame.size.width/2 && location.x <= timeLable.center.x + timeLable.frame.size.width/2 && location.y
             > timeLable.center.y - timeLable.frame.size.height/2 && location.y<timeLable.center.y +
             timeLable.frame.size.height/2) {
@@ -893,100 +408,41 @@ float preY;
             isTimeLableClick = YES;
             hintLable.hidden = NO;
             timeLable.textColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.6];
-            
         }else {
-            
             isTimeLableClick = NO;
-            
         }
-        
-        
         if (isTimeLableClick) {
-            
-            
-            
             isPause = YES;
-            
             if (min == 0 && sec == 0) {
-                
-                 hintLable.hidden = YES;
+                hintLable.hidden = YES;
             }else{
-                
-               
                 hintLable.hidden = NO;
             }
-            
-            
-            
             preY = location.y;
-            
-         
-            
 
-            
-            
-            
             timeLable.center = CGPointMake(timeLable.center.x
                                            , location.y);
-            
             hintLable.center = CGPointMake(timeLable.center.x
                                            , location.y - 40);
 
-            
-           
-            
-            
             if (!isStart) {
                 hintLable.text = @"Drop down to Start";
-                
-                
             }else{
                 hintLable.text = @"Drop down to Pause";
-                
-                
-                
             }
-            
-
-           
-            
-            
+  
             if (timeLable.center.y > 125 ) {
-                
-                NSLog(@"isOverHeight YES");
                 isOverHeight = YES;
-
-                
             }
-            
-            
-            
             if (timeLable.center.y < 120) {
-                
                 isLowerHeight = YES;
             }
-            
-            
         }
-        
     }
-
-    
-    
     waterWave.hidden = NO;
-
-    
-    
-    
-    
-    
-    
-    
     if (touchImage.center.y > timeLable.center.y - timeLable.frame.size.height/2 && touchImage.center.y < timeLable.center.y +timeLable.frame.size.height/2) {
         
         if (location.x >= timeLable.center.x + timeLable.frame.size.width/2 ) {
-            
-            
             line.center = CGPointMake(line.center.x, location.y);
             touchImage.center = location;
             isTimeLineClick = YES;
@@ -996,12 +452,8 @@ float preY;
             touchImage.hidden = NO;
             hopeTimeLable.hidden = NO;
             
-            
         }else if(location.x <= timeLable.center.x - timeLable.frame.size.width/2 ){
-        
-            
-            
-             line.center = CGPointMake(line.center.x, location.y);
+            line.center = CGPointMake(line.center.x, location.y);
             touchImage.center = location;
             isTimeLineClick = YES;
             timeLable.hidden = YES;
@@ -1010,24 +462,15 @@ float preY;
             line.hidden = NO;
             touchImage.hidden = NO;
             hopeTimeLable.hidden = NO;
-        
         }
-        
-        
     }
-    
-    
-    
     else if ( location.y
         > touchImage.center.y - touchImage.frame.size.height/2 && location.y<touchImage.center.y +
         touchImage.frame.size.height/2) {
         
         NSLog(@"x1 %f,x2 %f, y1 %f,y2 %f",touchImage.center.x - touchImage.frame.size.width/2,touchImage.center.x + touchImage.frame.size.width/2 ,touchImage.center.y - touchImage.frame.size.height/2 , touchImage.center.y +
               touchImage.frame.size.height/2 );
-    
-        
-        
-         line.center = CGPointMake(line.center.x, location.y);
+        line.center = CGPointMake(line.center.x, location.y);
         touchImage.center = location;
         isTimeLineClick = YES;
         timeLable.hidden = YES;
@@ -1036,28 +479,12 @@ float preY;
         line.hidden = NO;
         touchImage.hidden = NO;
         hopeTimeLable.hidden = NO;
-        
-        
     }
-    
-    
-    // isTimeLineCLick
-    
-    
+
     if (isTimeLineClick) {
-        
-        
-     
         isStart = NO;
-      
-        
-        NSLog(@"waterwavepos y is %f", waterWavePosY);
-        
-        
-        
         if (location.y > 200) {
-            
-             isCountTimeMode = NO;
+            isCountTimeMode = NO;
             touchImage.center = CGPointMake(location.x, 200);
             water.frame = CGRectMake(water.frame.origin.x
                                      , 200, water.frame.size.width, water.frame.size.height);
@@ -1068,12 +495,9 @@ float preY;
             waterWave.frame = CGRectMake(waterWave.frame.origin.x, 186, 640, 14);
             timeLable.text = @"00:00";
             hopeTimeLable.text =@"00:00";
-
-              waterWavePosY = 186;
+            waterWavePosY = 186;
             
         }else if(location.y <40) {
-            
-            
             touchImage.center = CGPointMake(location.x, 40);
             water.frame = CGRectMake(water.frame.origin.x
                                      , 40 - [[UIApplication sharedApplication] statusBarFrame].size.height, water.frame.size.width, water.frame.size.height);
@@ -1084,138 +508,66 @@ float preY;
             waterWave.hidden = YES;
             hopeTimeLable.text =@"+∞";
             timeLable.text = @"00:00";
-
             isCountTimeMode = YES;
-        
-            
         }
-        
-        else{
-            
-      isCountTimeMode = NO;
-        
+    else{
+        isCountTimeMode = NO;
         waterWavePosY = location.y - 14 ;
-            
-           line.center = CGPointMake(line.center.x, location.y);
-            
+        line.center = CGPointMake(line.center.x, location.y);
         touchImage.center = location;
         water.frame = CGRectMake(water.frame.origin.x
                                  , location.y, water.frame.size.width, water.frame.size.height);
         
-        
         hopeTimeLable.center = CGPointMake(location.x - 40, location.y);
-            
-            int time = 0;
-            time = (200.0f - location.y)*(80.0f/160.0f);
-            
-            
-            NSLog(@"time is %d",time);
-            
-            if (time<10) {
-                
-                hopeTimeLable.text = [NSString stringWithFormat:@"0%d:00",time];
-                
+        int time = 0;
+        time = (200.0f - location.y)*(80.0f/160.0f);
+        if (time < 10) {
+            hopeTimeLable.text = [NSString stringWithFormat:@"0%d:00",time];
                 timeLable.text = [NSString stringWithFormat:@"0%d:00",time];
-                
-                
             }else{
-                
-                   hopeTimeLable.text = [NSString stringWithFormat:@"%d:00",time];
+                hopeTimeLable.text = [NSString stringWithFormat:@"%d:00",time];
                 timeLable.text = [NSString stringWithFormat:@"%d:00",time];
-
-            
             }
-        
         }
-        
-
     }
-    
-    
-    
-    
-
-    
 }
 
 
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
-    
-    
-    
     UITouch *touch = [[event allTouches] anyObject];
     CGPoint location = [touch locationInView:self.view];
-    
-//    NSLog(@"move %f, %f",location.x,location.y);
-    
     touchYOffSet = location.y - preY;
     [self touchesBegan:touches withEvent:event];
-    
 }
 
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
-    
-
-    
     if ([finalPlayer isPlaying]) {
-        
         [finalPlayer pause];
         finalPlayer = nil;
     }
-    
-    
-    NSLog(@"touch ends");
-    
-    
     if (isTimeLableClick) {
-       
         if (!isStart) {
-            
-                waterDrop.hidden = YES;
+            waterDrop.hidden = YES;
         }else{
-        
-                waterDrop.hidden = NO;
+            waterDrop.hidden = NO;
         }
-
         timeLable.textColor = [UIColor whiteColor];
-     
-        
-        if (isOverHeight
-            ) {
-            
+        if (isOverHeight) {
             isShouldRaiseTimeBack = YES;
             isOverHeight = NO;
-            
-            NSLog(@"isshouldback yes");
-            
         }
         
-        
         if (isLowerHeight) {
-            
             isShouldPushTimeDown = YES;
             isLowerHeight = NO;
         }
-        
-        
-        
-        
+
         NSArray *times =  [timeLable.text componentsSeparatedByString:@":"];
-        
-        NSLog(@"min is %@, sec is %@", [times objectAtIndex:0], [times objectAtIndex:1]);
-        
         min = [[times objectAtIndex:0] intValue];
-        
         sec =[[times objectAtIndex:1] intValue];
-        
-        
-        
         if (!isCountTimeMode ) {
-            
             if (min == 0 && sec == 0) {
-                
                 isStart = NO;
-                
                 isTimeLableClick = NO;
                 isTimeLineClick = NO;
                 timeLable.hidden = NO;
@@ -1224,20 +576,12 @@ float preY;
                 line.hidden = YES;
                 touchImage.hidden = YES;
                 hopeTimeLable.hidden = YES;
-                
-                
                 return;
             }
             
         }
-        
-        
-       
-        
         isStart = !isStart;
-
     }
-    
     
     if (isTimeLineClick) {
         isSplashStart = YES;
@@ -1245,7 +589,6 @@ float preY;
         isStart = YES;
         [self splash];
     }
-    
     
     isTimeLableClick = NO;
     isTimeLineClick = NO;
@@ -1255,111 +598,23 @@ float preY;
     line.hidden = YES;
     touchImage.hidden = YES;
     hopeTimeLable.hidden = YES;
-    
-
-    
-    NSLog(@"start is %d", isStart);
-    
-    
-    
 }
 
-
-
-
-
-
 #pragma mark -player
-
 -(void)initPlayerAndPlay:(NSString *)song{
-    
     if (song == nil) {
         return;
     }
-    
     NSError *error = [[NSError alloc]init];
-    
     NSString *soundFilePath;
     soundFilePath = [[NSBundle mainBundle] pathForResource:song ofType: @"mp3"];
-    
-    
     NSURL *fileURL = [[NSURL alloc] initFileURLWithPath:soundFilePath ];
-    
-    
     player = [[AVAudioPlayer alloc]initWithContentsOfURL:fileURL error:&error];
     player.numberOfLoops = 0;
     player.volume = 1.0;
-    
-    
-    NSLog(@"error is %@",error);
-    
     [player prepareToPlay];
-    
     [player play];
     
 }
-
-
--(UIViewController *)viewControllerToPresent{
-    
-    return [UIApplication sharedApplication].keyWindow.rootViewController;;
-}
-- (void)adViewDidReceiveAd:(GADBannerView *)bannerView {
-    [UIView beginAnimations:@"BannerSlide" context:nil];
-    
-    if (!UIUserInterfaceIdiomPad == [UIDevice currentDevice].userInterfaceIdiom) {
-        
-        bannerView.frame = CGRectMake(0.0,
-                                      self.view.frame.size.height -
-                                      bannerView.frame.size.height,
-                                      bannerView.frame.size.width,
-                                      bannerView.frame.size.height);
-        
-    }else{
-        
-        bannerView.frame = CGRectMake(0.0,
-                                      self.view.frame.size.height -
-                                      bannerView.frame.size.height,
-                                      bannerView.frame.size.width,
-                                      bannerView.frame.size.height);
-        
-        
-    }
-    
-    
-    [UIView commitAnimations];
-}
-
-
-
--(void)adView:(GADBannerView *)view didFailToReceiveAdWithError:(GADRequestError *)error{
-    
-    
-    NSLog(@"adView:didFailToReceiveAdWithError:%@", [error localizedDescription]);
-    
-}
-
-
--(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
-
-    if ([segue.identifier isEqual:@"push"]) {
-        
-        
-        if (israte && !areAdsRemoved) {
-            
-            [alertDialog show];
-            
-            return;
-        }
-        
-        
-        
-     
-    }
-
-}
-
-
-
 
 @end
