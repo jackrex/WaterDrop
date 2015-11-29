@@ -7,7 +7,6 @@
 //
 
 #import "ViewController.h"
-#import "UMSocial.h"
 #import "SettingTableViewController.h"
 @interface ViewController ()<UIAlertViewDelegate>{
 

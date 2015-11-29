@@ -7,7 +7,6 @@
 //
 
 #import "SettingTableViewController.h"
-#import "UMSocial.h"
 @interface SettingTableViewController ()
 
 @end
@@ -54,12 +53,7 @@
             case 1:
             switch (indexPath.row) {
                     case 0:
-                    [UMSocialSnsService presentSnsIconSheetView:self
-                                                         appKey:@"534114c256240b5a2f12abf2"
-                                                      shareText:@"I am Such a Beautiful App  Time Drop  to recode My time, share it to you    https://itunes.apple.com/us/app/time+/id856824051?ls=1&mt=8 .  "
-                                                     shareImage:[UIImage imageNamed:@"icon.png"]
-                                                shareToSnsNames:[NSArray arrayWithObjects:UMShareToFacebook,UMShareToTwitter,UMShareToInstagram,nil]
-                                                       delegate:nil];
+                    //TODO: share it
                     
                     break;
             }
